@@ -6,7 +6,15 @@
 </head>
 
 <body>
-    <h1>Home MARVEL project</h1>
+    <div class="home-container">
+        <img alt="Logo MARVEL" class="mx-auto d-flex rounded img-fluid mb-3 mb-lg-0" style= "width:15%; margin-bottom:60px;" src="{% static 'base/images/logo_marvel.svg' %}">
+
+        <a href="{% url 'characters' %}"><button type="submit" class="home-button">Characters</button></a>
+        <a href=""><button type="submit" class="home-button">Prueba</button></a>
+        <a href=""><button type="submit" class="home-button">Prueba</button></a>
+        <a href=""><button type="submit" class="home-button">Prueba</button></a>
+        <a href=""><button type="submit" class="home-button">Prueba</button></a>
+    </div>
 </body>
 
 {% endblock content %}

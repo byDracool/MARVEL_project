@@ -1,12 +1,42 @@
+<!DOCTYPE html>
+<html lang="es">
 {% load static %}
 <head>
-  <!-- Styles -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <link rel="icon" type="ico" href="{% static 'base/images/favicon.ico' %}">
     <link rel="stylesheet" type="text/css" href="{% static 'base/css/main.css' %}">
 
-</head>
+    <style>
 
+    </style>
+</head>
 <body>
-<h1>Esto es base</h1>
-{% block content %}{% endblock content %}
+    <!-- Navbar -->
+    <div class="navbar">
+        {% if request.resolver_match.url_name != 'home' %}
+            <img alt="Logo MARVEL" class="navbar-logo" src="{% static 'base/images/logo_marvel.svg' %}">
+        {% else %}
+            <div></div>
+        {% endif %}
+
+        <ul class="navbar-links">
+            {% if request.resolver_match.url_name != 'home' %}
+                <li><a href="{% url 'home' %}">HOME</a></li>
+            {% endif %}
+            {% if request.resolver_match.url_name != 'characters' %}
+                <li><a href="{% url 'characters' %}">CHARACTERS</a></li>
+            {% endif %}
+        </ul>
+    </div>
+
+    {% block content %}{% endblock content %}
+
+    <div style="margin: 300px" class="footer-flex-container">
+        <div><a href="https://github.com/byDracool"><img style="width:30px;height:30px;" src="{% static 'base/images/github.png' %}"></a></div>
+        <div><a href="https://carlosterrez.dev/"><img style="width:30px;height:30px;" src="{% static 'base/images/logoCT.png' %}"></a></div>
+        <div><p style="font-size: 14px; margin-left: 10px;">Carlos Terrez &copy; 2025</p></div>
+    </div>
 </body>
+</html>

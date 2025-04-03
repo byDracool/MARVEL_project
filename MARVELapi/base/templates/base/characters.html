@@ -1,0 +1,49 @@
+{% extends 'base/base.html' %}
+{% block content %}
+{% load static %}
+<head>
+    <title>Characters</title>
+</head>
+
+<body>
+    <h1>MARVEL Characters:</h1>
+    <br>
+
+    <div class="flex-container-center">
+
+      <table>
+        <thead>
+          <tr class="table-primary" style="background: #900000">
+            <th scope="col">Grupo</th>
+            <th scope="col">Nombre</th>
+            <th scope="col">Fotografia</th>
+            <th scope="col">Sexo</th>
+            <th scope="col">Tutor/a</th>
+            <th scope="col">Observaciones</th>
+            <th scope="col">PET/KET</th>
+          </tr>
+        </thead>
+        <tbody>
+
+      {% for alumn in alumn_list %}
+        <tr class="table-secondary">
+          <td>{{alumn.Grupo}}</td>
+          <td><a href="{% url 'alumn'  alumn.id  %}" id="alumn-link">{{alumn.Nombre}}</a></td>
+          <td>{{alumn.Fotografia}}</td>
+          <td>{{alumn.Sexo}}</td>
+          <td>{{alumn.Tutor_a}}</td>
+          <td>{{alumn.Observaciones}}</td>
+          <td>{{alumn.PET_KET}}</td>
+        </tr>
+
+      {% endfor %}
+
+
+        </tbody>
+      </table>
+      <a href="{% url 'home' %}" class="home-button">Volver</a>
+    </div>
+
+</body>
+
+{% endblock content %}
