@@ -24,13 +24,17 @@ def home(request):
 
 
 def characters(request):
-    page = int(request.GET.get('page', 1))  # página actual, por defecto 1
+    page = int(request.GET.get('page', 1))
+    search_query = request.GET.get('search', '')
     limit = 20
     offset = (page - 1) * limit
 
-    url = f'https://gateway.marvel.com/v1/public/characters?limit={limit}&offset={offset}'
+    base_url = f'https://gateway.marvel.com/v1/public/characters?limit={limit}&offset={offset}'
+    if search_query:
+        base_url += f"&nameStartsWith={search_query}"
+
     auth_params = make_authorization()
-    url += auth_params
+    url = base_url + auth_params
 
     try:
         response = requests.get(url)
@@ -49,16 +53,18 @@ def characters(request):
         total = 0
 
     total_pages = (total + limit - 1) // limit
-
     page_range = range(1, total_pages + 1)
 
     context = {
         'characters': characters,
         'page': page,
-        'total_pages': total_pages
+        'total_pages': total_pages,
+        'page_range': page_range,
+        'search_query': search_query
     }
 
     return render(request, 'base/characters.html', context)
+
 
 
 

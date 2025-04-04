@@ -11,6 +11,12 @@
         <h1>MARVEL Characters:</h1>
         <br>
 
+        <form method="get" action="{% url 'characters' %}" style="margin-bottom: 20px;">
+            <input type="text" name="search" style="color:#590022; font-size: 18px; width: 300px; height: 40px;" placeholder="Find character..." value="{{ search_query }}" />
+            <button type="submit" class="find-button">Find</button>
+            <a href="{% url 'home' %}" class="back-button">Back</a>
+        </form>
+
       <table>
         <thead>
           <tr class="table-primary" style="background:#900000">
@@ -48,6 +54,9 @@
       <div class="pagination" style="margin-top: 30px;">
           <!-- "Previous" arrow -->
           {% if page > 1 %}
+            <a href="?page=1{% if search_query %}&search={{ search_query }}{% endif %}">« First</a>
+            <a href="?page={{ page|add:-1 }}{% if search_query %}&search={{ search_query }}{% endif %}">← Previous</a>
+
             <a href="?page=1" class="pagination-arrow">« First</a>
             <a href="?page={{ page|add:-1 }}" class="pagination-arrow">← Previous</a>
           {% endif %}
@@ -59,20 +68,20 @@
               {% if i == page %}
                 <span class="current-page">{{ i }}</span>
               {% else %}
-                <a href="?page={{ i }}" class="pagination-number">{{ i }}</a>
+                <a href="?page={{ i }}{% if search_query %}&search={{ search_query }}{% endif %}" class="pagination-number">{{ i }}</a>
               {% endif %}
             {% endfor %}
           </div>
 
           <!-- "Next" arrow -->
           {% if page < total_pages %}
-            <a href="?page={{ page|add:1 }}" class="pagination-arrow">→ Next</a>
-            <a href="?page={{ total_pages }}" class="pagination-arrow">Last »</a>
+            <a href="?page={{ page|add:1 }}{% if search_query %}&search={{ search_query }}{% endif %}" class="pagination-arrow">→ Next</a>
+            <a href="?page={{ total_pages }}{% if search_query %}&search={{ search_query }}{% endif %}" class="pagination-arrow">Last »</a>
           {% endif %}
       </div>
       {% endif %}
 
-    <a href="{% url 'home' %}" class="home-button">Volver</a>
+    <a href="{% url 'home' %}" class="back-button">Back</a>
     </div>
 </body>
 
