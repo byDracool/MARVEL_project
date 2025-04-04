@@ -6,44 +6,74 @@
 </head>
 
 <body>
-    <h1>MARVEL Characters:</h1>
-    <br>
 
     <div class="flex-container-center">
+        <h1>MARVEL Characters:</h1>
+        <br>
 
       <table>
         <thead>
-          <tr class="table-primary" style="background: #900000">
-            <th scope="col">Grupo</th>
-            <th scope="col">Nombre</th>
-            <th scope="col">Fotografia</th>
-            <th scope="col">Sexo</th>
-            <th scope="col">Tutor/a</th>
-            <th scope="col">Observaciones</th>
-            <th scope="col">PET/KET</th>
+          <tr class="table-primary" style="background:#900000">
+            <th scope="col">image</th>
+<!--            <th scope="col">id</th>-->
+            <th scope="col">name</th>
+            <th scope="col" style="width: 500px; height:30px;">description</th>
+
           </tr>
         </thead>
         <tbody>
 
-      {% for alumn in alumn_list %}
+        {% for character in characters %}
         <tr class="table-secondary">
-          <td>{{alumn.Grupo}}</td>
-          <td><a href="{% url 'alumn'  alumn.id  %}" id="alumn-link">{{alumn.Nombre}}</a></td>
-          <td>{{alumn.Fotografia}}</td>
-          <td>{{alumn.Sexo}}</td>
-          <td>{{alumn.Tutor_a}}</td>
-          <td>{{alumn.Observaciones}}</td>
-          <td>{{alumn.PET_KET}}</td>
+          <td>
+            <img
+              src="{{ character.thumbnail.path }}.{{ character.thumbnail.extension }}"
+              alt="{{ character.name }}"
+              style="width:100px; height:auto; border-radius:8px;"
+            />
+          </td>
+<!--          <td>{{character.id}}</td>-->
+          <td  style="padding-left:10px">{{character.name|upper}}</td>
+          <td>{{character.description | default:"Unavailable" }}</td>
+
         </tr>
 
-      {% endfor %}
-
-
+        {% endfor %}
         </tbody>
       </table>
-      <a href="{% url 'home' %}" class="home-button">Volver</a>
-    </div>
 
+
+     <!-- Pagination -->
+      {% if total_pages > 1 %}
+      <div class="pagination" style="margin-top: 30px;">
+          <!-- "Previous" arrow -->
+          {% if page > 1 %}
+            <a href="?page=1" class="pagination-arrow">« First</a>
+            <a href="?page={{ page|add:-1 }}" class="pagination-arrow">← Previous</a>
+          {% endif %}
+
+          <!-- Page numbers -->
+          <span>Página {{ page }} de {{ total_pages }} </span>
+          <div class="pagination-numbers">
+            {% for i in page_range %}
+              {% if i == page %}
+                <span class="current-page">{{ i }}</span>
+              {% else %}
+                <a href="?page={{ i }}" class="pagination-number">{{ i }}</a>
+              {% endif %}
+            {% endfor %}
+          </div>
+
+          <!-- "Next" arrow -->
+          {% if page < total_pages %}
+            <a href="?page={{ page|add:1 }}" class="pagination-arrow">→ Next</a>
+            <a href="?page={{ total_pages }}" class="pagination-arrow">Last »</a>
+          {% endif %}
+      </div>
+      {% endif %}
+
+    <a href="{% url 'home' %}" class="home-button">Volver</a>
+    </div>
 </body>
 
 {% endblock content %}

@@ -1,0 +1,31 @@
+{% extends 'base/base.html' %}
+{% block content %}
+{% load static %}
+<body>
+  <h1 class="titulo">Lista de Personajes</h1>
+
+  <div class="flex-container">
+    <table>
+        <thead>
+          <tr class="table-primary" style="background: #900000">
+            <th scope="col">id</th>
+            <th scope="col">name</th>
+            <th scope="col">description</th>
+          </tr>
+        </thead>
+        <tbody>
+
+      {% for character in characters %}
+        <tr class="table-secondary">
+          <td>{{character.id}}</td>
+          <td>{{character.name}}</td>
+          <td>{{ character.description|default:"Sin descripción" }}</td>
+        </tr>
+
+      {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</body>
+
+{% endblock content %}

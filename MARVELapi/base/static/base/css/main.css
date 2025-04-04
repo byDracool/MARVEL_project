@@ -75,11 +75,12 @@ body {
     background: #0026b7;
 }
 
-flex-container-center {
+.flex-container-center {
     display: flex;
     flex-direction: column;
     align-items: center;
-    text-align: center;
+    justify-content: center;
+    margin: auto;
 }
 
 .footer-flex-container {
@@ -89,4 +90,23 @@ flex-container-center {
     text-align: center;
     justify-content: center;
     gap: 5px;
+}
+
+.pagination {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  margin-top: 20px;
+}
+
+.pagination a {
+  padding: 6px 12px;
+  background-color: #900000;
+  color: white;
+  text-decoration: none;
+  border-radius: 6px;
+}
+
+.pagination a:hover {
+  background-color: #c10000;
 }
