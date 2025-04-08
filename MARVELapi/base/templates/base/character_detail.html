@@ -1,0 +1,52 @@
+{% extends 'base/base.html' %}
+{% block content %}
+{% load static %}
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    {% if character %}
+    <div class="flex-container-center">
+        <h2>{{ character.name|upper }}</h2>
+        <img src="{{ character.thumbnail.path }}.{{ character.thumbnail.extension }}" alt="{{ character.name }}" style="width:200px; height:auto; border-radius:8px;">
+        <p>{{ character.description|default:"No description available." }}</p>
+
+        <div class="character_items_lists_button">Comics: <small style="margin-left:10px">({{ character.comics.available }})</small></div>
+        {% for comic in character.comics.items %}
+            <p>{{ comic.name }}</p>
+        {% endfor %}
+
+
+        <div class="character_items_lists_button">Series: <small style="margin-left:10px">({{ character.series.available }})</small></div>
+        {% for serie in character.series.items %}
+            <p>{{ serie.name }}</p>
+        {% endfor %}
+
+        <div class="character_items_lists_button">Stories: <small style="margin-left:10px">({{ character.stories.available }})</small></div>
+        {% for story in character.stories.items %}
+            <p>{{ story.name }}</p>
+        {% endfor %}
+
+        <div class="character_items_lists_button">Events: <small style="margin-left:10px">({{ character.events.available }})</small></div>
+        {% for event in character.events.items %}
+            <p>{{ event.name }}</p>
+        {% endfor %}
+
+
+        <h2>External Links:</h2>
+        <div style="flex-direction:row; margin-top:20px; margin-bottom:50px;">
+            {% for link in character.urls %}
+                <a href="{{ link.url }}" class="home-button" target="_blank" rel="noopener noreferrer">{{ link.type }}</a>
+            {% endfor %}
+        </div>
+
+
+        <a href="{% url 'characters' %}" class="back-button">Back to list</a>
+    </div>
+    {% else %}
+    <p>Character not found.</p>
+    <a href="{% url 'characters' %}" class="back-button">Back to list</a>
+    {% endif %}
+</body>
+{% endblock content %}

@@ -41,6 +41,9 @@
 <!--          <td>{{character.id}}</td>-->
           <td  style="padding-left:10px">{{character.name|upper}}</td>
           <td>{{character.description | default:"Unavailable" }}</td>
+          <td style="padding-left:30px">
+            <a href="{% url 'character_detail' character.name %}" class="find-button">View</a>
+          </td>
 
         </tr>
 
@@ -49,37 +52,31 @@
       </table>
 
 
-     <!-- Pagination -->
-      {% if total_pages > 1 %}
-      <div class="pagination" style="margin-top: 30px;">
-          <!-- "Previous" arrow -->
-          {% if page > 1 %}
-            <a href="?page=1{% if search_query %}&search={{ search_query }}{% endif %}">« First</a>
-            <a href="?page={{ page|add:-1 }}{% if search_query %}&search={{ search_query }}{% endif %}">← Previous</a>
+     <!-- Paginación -->
+    {% if total_pages > 1 %}
+    <div class="pagination" style="margin-top: 30px;">
 
-            <a href="?page=1" class="pagination-arrow">« First</a>
-            <a href="?page={{ page|add:-1 }}" class="pagination-arrow">← Previous</a>
-          {% endif %}
+        <!-- Botones de navegación -->
+        {% if page > 1 %}
+            <a href="?page=1{% if search_query %}&search={{ search_query }}{% endif %}" class="pagination-arrow">« First</a>
+            <a href="?page={{ page|add:-1 }}{% if search_query %}&search={{ search_query }}{% endif %}" class="pagination-arrow">← Prev</a>
+        {% endif %}
 
-          <!-- Page numbers -->
-          <span>Página {{ page }} de {{ total_pages }} </span>
-          <div class="pagination-numbers">
-            {% for i in page_range %}
-              {% if i == page %}
+        <!-- Números de página (solo los cercanos) -->
+        {% for i in page_range %}
+            {% if i == page %}
                 <span class="current-page">{{ i }}</span>
-              {% else %}
+            {% else %}
                 <a href="?page={{ i }}{% if search_query %}&search={{ search_query }}{% endif %}" class="pagination-number">{{ i }}</a>
-              {% endif %}
-            {% endfor %}
-          </div>
+            {% endif %}
+        {% endfor %}
 
-          <!-- "Next" arrow -->
-          {% if page < total_pages %}
-            <a href="?page={{ page|add:1 }}{% if search_query %}&search={{ search_query }}{% endif %}" class="pagination-arrow">→ Next</a>
+        {% if page < total_pages %}
+            <a href="?page={{ page|add:1 }}{% if search_query %}&search={{ search_query }}{% endif %}" class="pagination-arrow">Next →</a>
             <a href="?page={{ total_pages }}{% if search_query %}&search={{ search_query }}{% endif %}" class="pagination-arrow">Last »</a>
-          {% endif %}
-      </div>
-      {% endif %}
+        {% endif %}
+    </div>
+    {% endif %}
 
     <a href="{% url 'home' %}" class="back-button">Back</a>
     </div>

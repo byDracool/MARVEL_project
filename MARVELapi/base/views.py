@@ -53,7 +53,9 @@ def characters(request):
         total = 0
 
     total_pages = (total + limit - 1) // limit
-    page_range = range(1, total_pages + 1)
+    start_page = max(page - 3, 1)
+    end_page = min(page + 3, total_pages)
+    page_range = range(start_page, end_page + 1)
 
     context = {
         'characters': characters,
@@ -66,6 +68,28 @@ def characters(request):
     return render(request, 'base/characters.html', context)
 
 
+def character_detail(request, name):  # <- recibe el nombre desde la URL
+    base_url = f'https://gateway.marvel.com/v1/public/characters?name={name}'
+    auth_params = make_authorization()
+    url = base_url + auth_params
+
+    try:
+        response = requests.get(url)
+        if response.status_code == 200:
+            data = response.json()
+            character = data['data']['results'][0] if data['data']['results'] else None
+        else:
+            print(f"Request error: {response.status_code}")
+            character = None
+    except requests.RequestException as exception:
+        print(f"Request error: {exception}")
+        character = None
+
+    context = {
+        'character': character,
+    }
+
+    return render(request, "base/character_detail.html", context)
 
 
 
