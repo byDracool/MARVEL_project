@@ -2,6 +2,7 @@ from django.shortcuts import render
 import hashlib
 from django.conf import settings
 import requests
+import json
 
 
 def compute_md5_hash(my_string):
@@ -92,5 +93,74 @@ def character_detail(request, name):  # <- recibe el nombre desde la URL
     return render(request, "base/character_detail.html", context)
 
 
+def comics_list(request):
+    page = int(request.GET.get('page', 1))
+    search_query = request.GET.get('search', '')
+    limit = 20
+    offset = (page - 1) * limit
 
+    base_url = f'https://gateway.marvel.com/v1/public/comics?limit={limit}&offset={offset}'
+    if search_query:
+        base_url += f"&titleStartsWith={search_query}"
+
+    auth_params = make_authorization()
+    url = base_url + auth_params
+
+    try:
+        response = requests.get(url)
+        if response.status_code == 200:
+            data = response.json()
+            comics = data['data']['results']
+            total = data['data']['total']
+        else:
+            print(f"Request error: {response.status_code}")
+            comics = []
+            total = 0
+
+    except requests.RequestException as exception:
+        print(f"Request error: {exception}")
+        comics = []
+        total = 0
+
+    total_pages = (total + limit - 1) // limit
+    start_page = max(page - 3, 1)
+    end_page = min(page + 3, total_pages)
+    page_range = range(start_page, end_page + 1)
+
+    context = {
+        'comics': comics,
+        'page': page,
+        'total_pages': total_pages,
+        'page_range': page_range,
+        'search_query': search_query
+    }
+
+    return render(request, 'base/comics.html', context)
+
+
+def comic_detail(request):
+    if request.method == "POST":
+        comic = {
+            'title': request.POST.get('title'),
+            'description': request.POST.get('description'),
+            'thumbnail': request.POST.get('thumbnail'),
+            'isbn': request.POST.get('isbn'),
+            'ean': request.POST.get('ean'),
+            'issn': request.POST.get('issn'),
+            'pageCount': request.POST.get('pages'),
+            'urls': json.loads(request.POST.get('urls', '[]')),
+            'series': json.loads(request.POST.get('series', '{}')),
+            'variants': json.loads(request.POST.get('variants', '[]')),
+            'collections': json.loads(request.POST.get('collections', '[]')),
+            'characters': json.loads(request.POST.get('characters', '{}')),
+            'stories': json.loads(request.POST.get('stories', '{}')),
+            'events': json.loads(request.POST.get('events', '{}')),
+        }
+    else:
+        comic = None
+
+    context = {
+        'comic': comic,
+    }
+    return render(request, "base/comic_detail.html", context)
 

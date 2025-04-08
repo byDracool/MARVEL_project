@@ -28,6 +28,10 @@
             {% if request.resolver_match.url_name != 'characters' %}
                 <li><a href="{% url 'characters' %}">CHARACTERS</a></li>
             {% endif %}
+
+            {% if request.resolver_match.url_name != 'comics' %}
+                <li><a href="{% url 'comics' %}">COMICS</a></li>
+            {% endif %}
         </ul>
     </div>
 

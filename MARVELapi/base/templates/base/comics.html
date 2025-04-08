@@ -1,0 +1,91 @@
+{% extends 'base/base.html' %}
+{% block content %}
+{% load static %}
+<head>
+    <title>Comics</title>
+</head>
+<body>
+    <div class="flex-container-center">
+        <h1>MARVEL Comics:</h1>
+        <br>
+
+        <form method="get" action="{% url 'comics' %}" style="margin-bottom: 20px;">
+            <input type="text" name="search" style="color:#590022; font-size: 18px; width: 300px; height: 40px;" placeholder="Find comic..." value="{{ search_query }}" />
+            <button type="submit" class="find-button">Find</button>
+            <a href="{% url 'home' %}" class="back-button">Back</a>
+        </form>
+
+      <table>
+        <thead>
+          <tr class="table-primary" style="background:#900000">
+            <th scope="col">image</th>
+            <th scope="col">title</th>
+            <th scope="col" style="width: 500px; height:30px;">description</th>
+
+          </tr>
+        </thead>
+        <tbody>
+
+        {% for comic in comics %}
+        <tr class="table-secondary">
+          <td>
+            <img
+              src="{{ comic.thumbnail.path }}.{{ comic.thumbnail.extension }}"
+              alt="{{ comic.title }}"
+              style="width:200px; height:auto; border-radius:8px;"
+            />
+          </td>
+          <td  style="padding-left:10px">{{comic.title|upper}}</td>
+          <td>{{comic.description | default:"Unavailable" }}</td>
+          <td style="padding-left:30px">
+              <form action="{% url 'comic_detail' %}" method="post">
+                  {% csrf_token %}
+                  <input type="hidden" name="title" value="{{ comic.title }}">
+                  <input type="hidden" name="description" value="{{ comic.description }}">
+                  <input type="hidden" name="thumbnail" value="{{ comic.thumbnail.path }}.{{ comic.thumbnail.extension }}">
+                  <input type="hidden" name="isbn" value="{{ comic.isbn }}">
+                  <input type="hidden" name="ean" value="{{ comic.ean }}">
+                  <input type="hidden" name="issn" value="{{ comic.issn }}">
+                  <input type="hidden" name="pages" value="{{ comic.pageCount }}">
+                  <button type="submit" class="find-button">View</button>
+                </form>
+
+          </td>
+
+        </tr>
+
+        {% endfor %}
+        </tbody>
+      </table>
+
+
+     <!-- Paginación -->
+    {% if total_pages > 1 %}
+    <div class="pagination" style="margin-top: 30px;">
+
+        <!-- Botones de navegación -->
+        {% if page > 1 %}
+            <a href="?page=1{% if search_query %}&search={{ search_query }}{% endif %}" class="pagination-arrow">« First</a>
+            <a href="?page={{ page|add:-1 }}{% if search_query %}&search={{ search_query }}{% endif %}" class="pagination-arrow">← Prev</a>
+        {% endif %}
+
+        <!-- Números de página (solo los cercanos) -->
+        {% for i in page_range %}
+            {% if i == page %}
+                <span class="current-page">{{ i }}</span>
+            {% else %}
+                <a href="?page={{ i }}{% if search_query %}&search={{ search_query }}{% endif %}" class="pagination-number">{{ i }}</a>
+            {% endif %}
+        {% endfor %}
+
+        {% if page < total_pages %}
+            <a href="?page={{ page|add:1 }}{% if search_query %}&search={{ search_query }}{% endif %}" class="pagination-arrow">Next →</a>
+            <a href="?page={{ total_pages }}{% if search_query %}&search={{ search_query }}{% endif %}" class="pagination-arrow">Last »</a>
+        {% endif %}
+    </div>
+    {% endif %}
+
+    <a href="{% url 'home' %}" class="back-button">Back</a>
+    </div>
+</body>
+{% endblock content %}
