@@ -19,8 +19,8 @@
         <thead>
           <tr class="table-primary" style="background:#900000">
             <th scope="col">image</th>
-            <th scope="col">title</th>
-            <th scope="col" style="width: 500px; height:30px;">description</th>
+            <th scope="col" style="width: 300px; height:30px;">title</th>
+            <th scope="col" style="width: 400px; height:30px;">description</th>
 
           </tr>
         </thead>
@@ -38,17 +38,11 @@
           <td  style="padding-left:10px">{{comic.title|upper}}</td>
           <td>{{comic.description | default:"Unavailable" }}</td>
           <td style="padding-left:30px">
-              <form action="{% url 'comic_detail' %}" method="post">
-                  {% csrf_token %}
-                  <input type="hidden" name="title" value="{{ comic.title }}">
-                  <input type="hidden" name="description" value="{{ comic.description }}">
-                  <input type="hidden" name="thumbnail" value="{{ comic.thumbnail.path }}.{{ comic.thumbnail.extension }}">
-                  <input type="hidden" name="isbn" value="{{ comic.isbn }}">
-                  <input type="hidden" name="ean" value="{{ comic.ean }}">
-                  <input type="hidden" name="issn" value="{{ comic.issn }}">
-                  <input type="hidden" name="pages" value="{{ comic.pageCount }}">
-                  <button type="submit" class="find-button">View</button>
-                </form>
+              <form method="POST" action="{% url 'comic_detail' %}">
+                {% csrf_token %}
+                <input type="hidden" name="comic_json" value="{{ comic.comic_json|escape }}">
+                <button type="submit" class="find-button" style="width:50px;">View</button>
+              </form>
 
           </td>
 
@@ -59,17 +53,17 @@
       </table>
 
 
-     <!-- Paginación -->
+     <!-- Pagination -->
     {% if total_pages > 1 %}
     <div class="pagination" style="margin-top: 30px;">
 
-        <!-- Botones de navegación -->
+        <!-- Nav buttons -->
         {% if page > 1 %}
             <a href="?page=1{% if search_query %}&search={{ search_query }}{% endif %}" class="pagination-arrow">« First</a>
             <a href="?page={{ page|add:-1 }}{% if search_query %}&search={{ search_query }}{% endif %}" class="pagination-arrow">← Prev</a>
         {% endif %}
 
-        <!-- Números de página (solo los cercanos) -->
+        <!-- Near page numbers -->
         {% for i in page_range %}
             {% if i == page %}
                 <span class="current-page">{{ i }}</span>

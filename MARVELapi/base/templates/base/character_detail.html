@@ -13,26 +13,32 @@
         <p>{{ character.description|default:"No description available." }}</p>
 
         <div class="character_items_lists_button">Comics: <small style="margin-left:10px">({{ character.comics.available }})</small></div>
-        {% for comic in character.comics.items %}
-            <p>{{ comic.name }}</p>
-        {% endfor %}
-
+        <ul>
+            {% for comic in character.comics.items %}
+                <li><p>{{ comic.name }}</p></li>
+            {% endfor %}
+        </ul>
 
         <div class="character_items_lists_button">Series: <small style="margin-left:10px">({{ character.series.available }})</small></div>
-        {% for serie in character.series.items %}
-            <p>{{ serie.name }}</p>
-        {% endfor %}
+        <ul>
+            {% for serie in character.series.items %}
+                <li><p>{{ serie.name }}</p></li>
+            {% endfor %}
+        </ul>
 
         <div class="character_items_lists_button">Stories: <small style="margin-left:10px">({{ character.stories.available }})</small></div>
-        {% for story in character.stories.items %}
-            <p>{{ story.name }}</p>
-        {% endfor %}
+        <ul>
+            {% for story in character.stories.items %}
+            <li><p>{{ story.name }}</p></li>
+            {% endfor %}
+        </ul>
 
         <div class="character_items_lists_button">Events: <small style="margin-left:10px">({{ character.events.available }})</small></div>
-        {% for event in character.events.items %}
-            <p>{{ event.name }}</p>
-        {% endfor %}
-
+        <ul>
+            {% for event in character.events.items %}
+            <li><p>{{ event.name }}</p></li>
+            {% endfor %}
+        </ul>
 
         <h2>External Links:</h2>
         <div style="flex-direction:row; margin-top:20px; margin-bottom:50px;">

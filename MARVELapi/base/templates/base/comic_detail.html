@@ -2,29 +2,37 @@
 {% block content %}
 {% load static %}
 <head>
-    <title>Nombre comic</title>
+    <title>{{ comic.title }}</title>
 </head>
 
 <body>
+<!--    <pre>{{ comic|safe|pprint }}</pre>-->
     <div class="flex-container-center">
         {% if comic %}
             <h2>{{ comic.title|upper }}</h2>
-            <img src="{{ comic.thumbnail }}" alt="{{ comic.title }}" />
-            <p>Description: {{ comic.description|default:"Unavailable" }}</p>
-            <p>Isbn: {{ comic.isbn|default:"-" }}</p>
-            <p>Ean: {{ comic.ean|default:"-" }}</p>
-            <p>Issn: {{ comic.issn|default:"-" }}</p>
-            <p>Pages: {{ comic.pageCount }}</p>
 
-            <h3>Links:</h3>
+            {% if comic.thumbnail %}
+                <img src="{{ comic.thumbnail.path }}.{{ comic.thumbnail.extension }}" alt="{{ comic.title }}" />
+            {% endif %}
+
+            <p style="margin-top:30px;">{{ comic.description|default:"Description: Unavailable" }}</p>
+
+            <div class="character_items_lists_button">Comic info:</div>
             <ul>
-                {% for url in comic.urls %}
-                    <li><a href="{{ url.url }}" target="_blank">{{ url.type }}</a></li>
-                {% endfor %}
+
+                <li><p><strong>ISBN:</strong> {{ comic.isbn|default:"-" }}</p></li>
+                <li><p><strong>UPC:</strong> {{ comic.upc|default:"-" }}</p></li>
+                <li><p><strong>EAN:</strong> {{ comic.ean|default:"-" }}</p></li>
+                <li><p><strong>ISSN:</strong> {{ comic.issn|default:"-" }}</p></li>
+                <li><p><strong>Pages:</strong> {{ comic.pageCount }}</p></li>
             </ul>
 
-            <p>Series: {{ comic.series.name }}</p>
+            <div class="character_items_lists_button">Series:</div>
+            <ul>
+                <li><p><strong>Series:</strong> {{ comic.series.name }}</p></li>
+            </ul>
 
+            <div class="character_items_lists_button">Variants:<small style="margin-left:10px">({{ comics.variants.available }})</small></div>
             {% if comic.variants %}
                 <h3>Variants:</h3>
                 <ul>
@@ -36,17 +44,61 @@
                 <p>No variants available.</p>
             {% endif %}
 
-            <p>Collections: {{ comic.collections }}</p>
-            <p>Characters: {{ comic.characters }}</p>
+            <div class="character_items_lists_button">Creators:<small style="margin-left:10px">({{ comics.creators.available }})</small></div>
+            {% if comic.creators.items %}
+                <ul>
+                    {% for creator in comic.creators.items %}
+                        <li>{{ creator.name }} ({{ creator.role }})</li>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                <p>No creators listed.</p>
+            {% endif %}
 
-            <h3>Stories:</h3>
-            <ul>
-                {% for story in comic.stories.items %}
-                    <li>{{ story.name }} ({{ story.type }})</li>
-                {% endfor %}
-            </ul>
 
-            <p>Events: {{ comic.events }}</p>
+            <div class="character_items_lists_button">Stories:<small style="margin-left:10px">({{ comics.stories.available }})</small></div>
+            {% if comic.stories.items %}
+                <ul>
+                    {% for story in comic.stories.items %}
+                        <li>{{ story.name }} ({{ story.type }})</li>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                <p>No stories available.</p>
+            {% endif %}
+
+            <div class="character_items_lists_button">Characters:<small style="margin-left:10px">({{ comics.characters.available }})</small></div>
+            {% if comic.characters.items %}
+                <ul>
+                    {% for character in comic.characters.items %}
+                        <li>{{ character.name }}</li>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                <p>No characters founded.</p>
+            {% endif %}
+
+            <div class="character_items_lists_button">Events:<small style="margin-left:10px">({{ comics.events.available }})</small></div>
+            {% if comic.events.items %}
+                <ul>
+                    {% for event in comic.events.items %}
+                        <li>{{ event.name }}</li>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                <p>No events founded.</p>
+            {% endif %}
+
+            <h2>External links:</h2>
+            {% if comic.urls %}
+                    {% for url in comic.urls %}
+                        <a href="{{ url.url }}" class="home-button" target="_blank" rel="noopener noreferrer">{{ url.type }}</a>
+                    {% endfor %}
+
+            {% else %}
+                <p>No links available.</p>
+            {% endif %}
+
         {% else %}
             <p>No comic details found.</p>
         {% endif %}

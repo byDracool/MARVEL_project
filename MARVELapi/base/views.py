@@ -4,7 +4,6 @@ from django.conf import settings
 import requests
 import json
 
-
 def compute_md5_hash(my_string):
     m = hashlib.md5()
     m.update(my_string.encode('utf-8'))
@@ -111,6 +110,11 @@ def comics_list(request):
         if response.status_code == 200:
             data = response.json()
             comics = data['data']['results']
+
+            # Add comic_json for each cómic
+            for comic in comics:
+                comic["comic_json"] = json.dumps(comic)
+
             total = data['data']['total']
         else:
             print(f"Request error: {response.status_code}")
@@ -134,33 +138,21 @@ def comics_list(request):
         'page_range': page_range,
         'search_query': search_query
     }
-
+    # print("JSON EXAMPLE:", comics[0]["comic_json"])
     return render(request, 'base/comics.html', context)
 
 
 def comic_detail(request):
     if request.method == "POST":
-        comic = {
-            'title': request.POST.get('title'),
-            'description': request.POST.get('description'),
-            'thumbnail': request.POST.get('thumbnail'),
-            'isbn': request.POST.get('isbn'),
-            'ean': request.POST.get('ean'),
-            'issn': request.POST.get('issn'),
-            'pageCount': request.POST.get('pages'),
-            'urls': json.loads(request.POST.get('urls', '[]')),
-            'series': json.loads(request.POST.get('series', '{}')),
-            'variants': json.loads(request.POST.get('variants', '[]')),
-            'collections': json.loads(request.POST.get('collections', '[]')),
-            'characters': json.loads(request.POST.get('characters', '{}')),
-            'stories': json.loads(request.POST.get('stories', '{}')),
-            'events': json.loads(request.POST.get('events', '{}')),
-        }
+        comic_json = request.POST.get('comic_json')
+        try:
+            print("📥 JSON crudo recibido:", comic_json)
+            comic = json.loads(comic_json)
+        except Exception as e:
+            print("❌ JSON DECODE ERROR:", e)
+            comic = None
     else:
         comic = None
 
-    context = {
-        'comic': comic,
-    }
-    return render(request, "base/comic_detail.html", context)
+    return render(request, "base/comic_detail.html", {"comic": comic})
 
