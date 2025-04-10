@@ -2,15 +2,17 @@
 {% block content %}
 {% load static %}
 <head>
-    <title>Comics</title>
+    <title>Events</title>
 </head>
+
 <body>
+
     <div class="flex-container-center">
-        <h1>MARVEL Comics:</h1>
+        <h1>MARVEL Events:</h1>
         <br>
 
-        <form method="get" action="{% url 'comics' %}" style="margin-bottom: 20px;">
-            <input type="text" name="search" style="color:#590022; font-size: 18px; width: 300px; height: 40px;" placeholder="Find comic..." value="{{ search_query }}" />
+        <form method="get" action="{% url 'events' %}" style="margin-bottom: 20px;">
+            <input type="text" name="search" style="color:#590022; font-size: 18px; width: 300px; height: 40px;" placeholder="Find event..." value="{{ search_query }}" />
             <button type="submit" class="find-button">Find</button>
             <a href="{% url 'home' %}" class="back-button">Back</a>
         </form>
@@ -19,30 +21,28 @@
         <thead>
           <tr class="table-primary" style="background:#900000">
             <th scope="col">image</th>
-            <th scope="col" style="width: 300px; height:30px;">title</th>
-            <th scope="col" style="width: 400px; height:30px;">description</th>
+<!--            <th scope="col">id</th>-->
+            <th scope="col">title</th>
+            <th scope="col" style="width: 500px; height:30px;">description</th>
 
           </tr>
         </thead>
         <tbody>
 
-        {% for comic in comics %}
+        {% for event in events %}
         <tr class="table-secondary">
           <td>
             <img
-              src="{{ comic.thumbnail.path }}.{{ comic.thumbnail.extension }}"
-              alt="{{ comic.title }}"
-              style="width:200px; height:auto; border-radius:8px;"
+              src="{{ event.thumbnail.path }}.{{ event.thumbnail.extension }}"
+              alt="{{ event.title }}"
+              style="width:100px; height:auto; border-radius:8px;"
             />
           </td>
-          <td  style="padding-left:10px">{{comic.title|upper}}</td>
-          <td>{{comic.description | default:"Unavailable" }}</td>
+<!--          <td>{{character.id}}</td>-->
+          <td  style="padding-left:10px">{{event.title|upper}}</td>
+          <td>{{event.description | default:"Unavailable" }}</td>
           <td style="padding-left:30px">
-              <form method="POST" action="{% url 'comic_detail' %}">
-                {% csrf_token %}
-                <input type="hidden" name="comic_json" value="{{ comic.comic_json|escape }}">
-                <button type="submit" class="find-button" style="width:50px;">View</button>
-              </form>
+            <a href="{% url 'event_detail' event.title %}" class="find-button">View</a>
           </td>
 
         </tr>
@@ -62,7 +62,7 @@
             <a href="?page={{ page|add:-1 }}{% if search_query %}&search={{ search_query }}{% endif %}" class="pagination-arrow">← Prev</a>
         {% endif %}
 
-        <!-- Near page numbers -->
+        <!-- Números de página (solo los cercanos) -->
         {% for i in page_range %}
             {% if i == page %}
                 <span class="current-page">{{ i }}</span>
@@ -81,4 +81,5 @@
     <a href="{% url 'home' %}" class="back-button">Back</a>
     </div>
 </body>
+
 {% endblock content %}

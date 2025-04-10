@@ -1,0 +1,84 @@
+{% extends 'base/base.html' %}
+{% block content %}
+{% load static %}
+<head>
+    <meta charset="UTF-8">
+    <title>{{ creator.fullName }}</title>
+</head>
+<body>
+<!--    <pre>{{ creator|safe|pprint }}</pre>-->
+    <div class="flex-container-center">
+        <h2>{{ creator.fullName|upper }}</h2>
+        {% if creator.thumbnail %}
+            <img src="{{ creator.thumbnail.path }}.{{ creator.thumbnail.extension }}" alt="{{ creator.fullName }}" />
+        {% endif %}
+
+        <div class="character_items_lists_button">Personal info:</div>
+            <ul>
+
+                <li><p><strong>First Name:</strong> {{ creator.firstName|default:"-" }}</p></li>
+                <li><p><strong>Middle Name:</strong> {{ creator.middleName|default:"-" }}</p></li>
+                <li><p><strong>Last Name:</strong> {{ creator.lastName|default:"-" }}</p></li>
+                <li><p><strong>Sufix:</strong> {{ creator.sufix|default:"-" }}</p></li>
+            </ul>
+
+        <div class="character_items_lists_button">Comics:<small style="margin-left:10px">({{ creator.comics.available }})</small></div>
+            {% if creator.comics %}
+                <ul>
+                    {% for comic in creator.comics.items %}
+                        <li>{{ comic.name }}</li>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                <p>No comics available.</p>
+            {% endif %}
+
+        <div class="character_items_lists_button">Series:<small style="margin-left:10px">({{ creator.series.available }})</small></div>
+            {% if creator.series %}
+                <ul>
+                    {% for serie in creator.series.items %}
+                        <li>{{ serie.name }}</li>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                <p>No series available.</p>
+            {% endif %}
+
+        <div class="character_items_lists_button">Stories:<small style="margin-left:10px">({{ creator.stories.available }})</small></div>
+            {% if creator.stories %}
+                <ul>
+                    {% for story in creator.stories.items %}
+                        <li>{{ story.name }}</li>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                <p>No stories available.</p>
+            {% endif %}
+
+        <div class="character_items_lists_button">Events:<small style="margin-left:10px">({{ creator.events.available }})</small></div>
+            {% if creator.events %}
+                <ul>
+                    {% for event in creator.events.items %}
+                        <li>{{ event.name }}</li>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                <p>No events available.</p>
+            {% endif %}
+
+        <h2>External Links:</h2>
+            {% if creator.urls %}
+                <div style="flex-direction:row; margin-top:20px; margin-bottom:50px;">
+                    {% for url in creator.urls %}
+                        <a href="{{ url.url }}" class="home-button" target="_blank" rel="noopener noreferrer">{{ url.type }}</a>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <p>No links available.</p>
+            {% endif %}
+
+        <a href="{% url 'creators' %}" class="back-button">Back to list</a>
+
+    </div>
+</body>
+{% endblock content %}

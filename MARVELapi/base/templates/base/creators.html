@@ -1,0 +1,106 @@
+{% extends 'base/base.html' %}
+{% block content %}
+{% load static %}
+<head>
+    <title>Creators</title>
+</head>
+<body>
+    <div class="flex-container-center">
+        <h1>MARVEL Creators:</h1>
+        <br>
+
+        <form method="get" action="{% url 'creators' %}" style="margin-bottom: 20px;">
+            <input type="text" name="search" style="color:#590022; font-size: 18px; width: 300px; height: 40px;" placeholder="Find creator by name..." value="{{ search_query }}" />
+            <button type="submit" class="find-button">Find</button>
+            <a href="{% url 'home' %}" class="back-button">Back</a>
+        </form>
+
+      <table>
+        <thead>
+          <tr class="table-primary" style="background:#900000">
+            <th scope="col">image</th>
+            <th scope="col">fullName</th>
+
+          </tr>
+        </thead>
+        <tbody>
+
+        {% for creator in creators %}
+        <tr class="table-secondary">
+          <td>
+            <img
+              src="{{ creator.thumbnail.path }}.{{ creator.thumbnail.extension }}"
+              alt="{{ creator.name }}"
+              style="width:100px; height:auto; border-radius:8px;"
+            />
+          </td>
+          <td  style="padding-left:10px">{{creator.fullName|upper}}</td>
+
+          <td style="padding-left:10px">
+              <form method="POST" action="{% url 'creator_detail' %}?view=comics">
+                {% csrf_token %}
+                <input type="hidden" name="creator_json" value="{{ creator.creator_json|escape }}">
+                <button type="submit" class="find-button" style="width:70px; height:70px;">Comics</button>
+              </form>
+          </td>
+          <td style="padding-left:10px">
+              <form method="POST" action="{% url 'creator_series' %}?view=series">
+                {% csrf_token %}
+                <input type="hidden" name="creator_json" value="{{ creator.creator_json|escape }}">
+                <button type="submit" class="find-button" style="width:70px; height:70px;">Series</button>
+              </form>
+          </td>
+          <td style="padding-left:10px">
+              <form method="POST" action="{% url 'creator_stories' %}?view=stories">
+                {% csrf_token %}
+                <input type="hidden" name="creator_json" value="{{ creator.creator_json|escape }}">
+                <button type="submit" class="find-button" style="width:70px; height:70px;">Stories</button>
+              </form>
+          </td>
+          <td style="padding-left:30px">
+              <form method="POST" action="{% url 'creator_detail' %}?view=detail">
+                {% csrf_token %}
+                <input type="hidden" name="creator_json" value="{{ creator.creator_json|escape }}">
+                <button type="submit" class="find-button" style="width:200px; height:70px; text-decoration:underline;">Full info</button>
+              </form>
+          </td>
+
+        </tr>
+
+        {% endfor %}
+        </tbody>
+      </table>
+
+
+     <!-- Pagination -->
+    {% if total_pages > 1 %}
+    <div class="pagination" style="margin-top: 30px;">
+
+        <!-- Nav buttons -->
+        {% if page > 1 %}
+            <a href="?page=1{% if search_query %}&search={{ search_query }}{% endif %}" class="pagination-arrow">« First</a>
+            <a href="?page={{ page|add:-1 }}{% if search_query %}&search={{ search_query }}{% endif %}" class="pagination-arrow">← Prev</a>
+        {% endif %}
+
+        <!-- Near page numbers -->
+        {% for i in page_range %}
+            {% if i == page %}
+                <span class="current-page">{{ i }}</span>
+            {% else %}
+                <a href="?page={{ i }}{% if search_query %}&search={{ search_query }}{% endif %}" class="pagination-number">{{ i }}</a>
+            {% endif %}
+        {% endfor %}
+
+        {% if page < total_pages %}
+            <a href="?page={{ page|add:1 }}{% if search_query %}&search={{ search_query }}{% endif %}" class="pagination-arrow">Next →</a>
+            <a href="?page={{ total_pages }}{% if search_query %}&search={{ search_query }}{% endif %}" class="pagination-arrow">Last »</a>
+        {% endif %}
+    </div>
+    {% endif %}
+
+    <a href="{% url 'home' %}" class="back-button">Back</a>
+    </div>
+
+
+</body>
+{% endblock content %}

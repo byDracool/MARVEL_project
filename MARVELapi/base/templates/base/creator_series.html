@@ -1,0 +1,31 @@
+{% extends 'base/base.html' %}
+{% block content %}
+{% load static %}
+<head>
+    <meta charset="UTF-8">
+    <title>{{ creator.fullName }}</title>
+</head>
+<body>
+<!--    <pre>{{ creator|safe|pprint }}</pre>-->
+    <div class="flex-container-center">
+        <h2>{{ creator.fullName|upper }}</h2>
+        {% if creator.thumbnail %}
+            <img src="{{ creator.thumbnail.path }}.{{ creator.thumbnail.extension }}" alt="{{ creator.fullName }}" />
+        {% endif %}
+
+        <div class="character_items_lists_button">Series:<small style="margin-left:10px">({{ creator.series.available }})</small></div>
+            {% if creator.series %}
+                <ul>
+                    {% for serie in creator.series.items %}
+                        <li>{{ serie.name }}</li>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                <p>No series available.</p>
+            {% endif %}
+
+        <a href="{% url 'creators' %}" class="back-button">Back to list</a>
+
+    </div>
+</body>
+{% endblock content %}

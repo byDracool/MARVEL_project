@@ -1,0 +1,66 @@
+{% extends 'base/base.html' %}
+{% block content %}
+{% load static %}
+<head>
+    <meta charset="UTF-8">
+    <title>{{ event.title }}</title>
+</head>
+<body>
+    {% if event %}
+    <div class="flex-container-center">
+        <h2>{{ event.title|upper }}</h2>
+        <img src="{{ event.thumbnail.path }}.{{ event.thumbnail.extension }}" alt="{{ event.title }}">
+        <p style="width:600px;">{{ event.description|default:"No description available."}}</p>
+        <p style="color:#2997fe; font-size: 20px;">From ({{ event.start|default:"Not available." }}) to ({{ event.end|default:"Not available." }})</p>
+
+        <div class="character_items_lists_button">Creators: <small style="margin-left:10px">({{ event.creators.available }})</small></div>
+        <ul>
+            {% for creator in event.creators.items %}
+                <li><p>{{ creator.name }}<small style="margin-left:10px">({{ creator.role }})</small></p></li>
+            {% endfor %}
+        </ul>
+
+        <div class="character_items_lists_button">Characters: <small style="margin-left:10px">({{ event.characters.available }})</small></div>
+        <ul>
+            {% for character in event.characters.items %}
+                <li><p>{{ character.name }}</p></li>
+            {% endfor %}
+        </ul>
+
+        <div class="character_items_lists_button">Stories: <small style="margin-left:10px">({{ event.stories.available }})</small></div>
+        <ul>
+            {% for story in event.stories.items %}
+                <li><p>{{ story.name }} ({{ story.type }})</p></li>
+            {% endfor %}
+        </ul>
+
+        <div class="character_items_lists_button">Comics: <small style="margin-left:10px">({{ event.comics.available }})</small></div>
+        <ul>
+            {% for comic in event.comics.items %}
+                <li><p>{{ comic.name }}</p></li>
+            {% endfor %}
+        </ul>
+
+        <div class="character_items_lists_button">Series: <small style="margin-left:10px">({{ event.series.available }})</small></div>
+        <ul>
+            {% for serie in event.series.items %}
+                <li><p>{{ serie.name }}</p></li>
+            {% endfor %}
+        </ul>
+
+        <h2>External Links:</h2>
+        <div style="flex-direction:row; margin-top:20px; margin-bottom:50px;">
+            {% for link in event.urls %}
+                <a href="{{ link.url }}" class="home-button" target="_blank" rel="noopener noreferrer">{{ link.type }}</a>
+            {% endfor %}
+        </div>
+
+
+        <a href="{% url 'events' %}" class="back-button">Back to list</a>
+    </div>
+    {% else %}
+    <p>Character not found.</p>
+    <a href="{% url 'events' %}" class="back-button">Back to list</a>
+    {% endif %}
+</body>
+{% endblock content %}

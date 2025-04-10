@@ -52,17 +52,17 @@
       </table>
 
 
-     <!-- Paginación -->
+     <!-- Pagination -->
     {% if total_pages > 1 %}
     <div class="pagination" style="margin-top: 30px;">
 
-        <!-- Botones de navegación -->
+        <!-- Nav buttons -->
         {% if page > 1 %}
             <a href="?page=1{% if search_query %}&search={{ search_query }}{% endif %}" class="pagination-arrow">« First</a>
             <a href="?page={{ page|add:-1 }}{% if search_query %}&search={{ search_query }}{% endif %}" class="pagination-arrow">← Prev</a>
         {% endif %}
 
-        <!-- Números de página (solo los cercanos) -->
+        <!-- Near page numbers -->
         {% for i in page_range %}
             {% if i == page %}
                 <span class="current-page">{{ i }}</span>

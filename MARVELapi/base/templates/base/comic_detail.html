@@ -29,12 +29,11 @@
 
             <div class="character_items_lists_button">Series:</div>
             <ul>
-                <li><p><strong>Series:</strong> {{ comic.series.name }}</p></li>
+                <li><p>{{ comic.series.name }}</p></li>
             </ul>
 
             <div class="character_items_lists_button">Variants:<small style="margin-left:10px">({{ comics.variants.available }})</small></div>
             {% if comic.variants %}
-                <h3>Variants:</h3>
                 <ul>
                     {% for variant in comic.variants %}
                         <li>{{ variant.name }}</li>
@@ -89,12 +88,13 @@
                 <p>No events founded.</p>
             {% endif %}
 
-            <h2>External links:</h2>
+            <h2>External Links:</h2>
             {% if comic.urls %}
+                <div style="flex-direction:row; margin-top:20px; margin-bottom:50px;">
                     {% for url in comic.urls %}
                         <a href="{{ url.url }}" class="home-button" target="_blank" rel="noopener noreferrer">{{ url.type }}</a>
                     {% endfor %}
-
+                </div>
             {% else %}
                 <p>No links available.</p>
             {% endif %}
@@ -102,6 +102,8 @@
         {% else %}
             <p>No comic details found.</p>
         {% endif %}
+
+        <a href="{% url 'comics' %}" class="back-button">Back to list</a>
     </div>
 </body>
 {% endblock content %}

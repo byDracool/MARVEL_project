@@ -32,6 +32,15 @@
             {% if request.resolver_match.url_name != 'comics' %}
                 <li><a href="{% url 'comics' %}">COMICS</a></li>
             {% endif %}
+
+            {% if request.resolver_match.url_name != 'creators' %}
+                <li><a href="{% url 'creators' %}">CREATORS</a></li>
+            {% endif %}
+
+            {% if request.resolver_match.url_name != 'events' %}
+                <li><a href="{% url 'events' %}">EVENTS</a></li>
+            {% endif %}
+
         </ul>
     </div>
 

@@ -69,6 +69,7 @@ body {
     cursor: pointer;
     text-decoration: none;
     margin-top: 10px;
+    width: 200px;
 }
 
 .home-button:hover {
