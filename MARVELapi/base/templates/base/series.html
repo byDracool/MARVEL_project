@@ -8,11 +8,11 @@
 <body>
 
     <div class="flex-container-center">
-        <h1>MARVEL Events:</h1>
+        <h1>MARVEL Series:</h1>
         <br>
 
-        <form method="get" action="{% url 'events' %}" style="margin-bottom: 20px;">
-            <input type="text" name="search" style="color:#590022; font-size: 18px; width: 300px; height: 40px;" placeholder="Find event..." value="{{ search_query }}" />
+        <form method="get" action="{% url 'series' %}" style="margin-bottom: 20px;">
+            <input type="text" name="search" style="color:#590022; font-size: 18px; width: 300px; height: 40px;" placeholder="Find serie..." value="{{ search_query }}" />
             <button type="submit" class="find-button">Find</button>
             <a href="{% url 'home' %}" class="back-button">Back</a>
         </form>
@@ -28,19 +28,19 @@
         </thead>
         <tbody>
 
-        {% for event in events %}
+        {% for serie in series %}
         <tr class="table-secondary">
           <td>
             <img
-              src="{{ event.thumbnail.path }}.{{ event.thumbnail.extension }}"
-              alt="{{ event.title }}"
+              src="{{ serie.thumbnail.path }}.{{ serie.thumbnail.extension }}"
+              alt="{{ serie.title }}"
               style="width:100px; height:auto; border-radius:8px;"
             />
           </td>
-          <td  style="padding-left:10px">{{event.title|upper}}</td>
-          <td>{{event.description | default:"Unavailable" }}</td>
+          <td  style="padding-left:10px">{{serie.title|upper}}</td>
+          <td>{{serie.description | default:"Unavailable" }}</td>
           <td style="padding-left:30px">
-            <a href="{% url 'event_detail' event.title %}" class="find-button">View</a>
+            <a href="{% url 'serie_detail' %}?data={{ serie.encoded }}" class="find-button">View</a>
           </td>
 
         </tr>

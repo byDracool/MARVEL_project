@@ -41,6 +41,10 @@
                 <li><a href="{% url 'events' %}">EVENTS</a></li>
             {% endif %}
 
+            {% if request.resolver_match.url_name != 'series' %}
+                <li><a href="{% url 'series' %}">SERIES</a></li>
+            {% endif %}
+
         </ul>
     </div>
 

@@ -1,0 +1,66 @@
+{% extends 'base/base.html' %}
+{% block content %}
+{% load static %}
+<head>
+    <meta charset="UTF-8">
+    <title>{{ serie.title }}</title>
+</head>
+<body>
+    {% if serie %}
+    <div class="flex-container-center">
+        <h2>{{ serie.title|upper }}</h2>
+        <img src="{{ serie.thumbnail.path }}.{{ serie.thumbnail.extension }}" alt="{{ serie.title }}">
+        <p style="width:600px; text-align:center;">{{ serie.description|default:"No description available."}}</p>
+        <p style="color:#2997fe; font-size: 20px;">From ({{ serie.startYear|default:"Not available." }}) to ({{ serie.endYear|default:"Not available." }})</p>
+
+        <div class="character_items_lists_button">Creators: <small style="margin-left:10px">({{ serie.creators.available }})</small></div>
+        <ul>
+            {% for creator in serie.creators.items %}
+                <li><p>{{ creator.name }}<small style="margin-left:10px">({{ creator.role }})</small></p></li>
+            {% endfor %}
+        </ul>
+
+        <div class="character_items_lists_button">Characters: <small style="margin-left:10px">({{ serie.characters.available }})</small></div>
+        <ul>
+            {% for character in serie.characters.items %}
+                <li><p>{{ character.name }}</p></li>
+            {% endfor %}
+        </ul>
+
+        <div class="character_items_lists_button">Stories: <small style="margin-left:10px">({{ serie.stories.available }})</small></div>
+        <ul>
+            {% for story in serie.stories.items %}
+                <li><p>{{ story.name }} ({{ story.type }})</p></li>
+            {% endfor %}
+        </ul>
+
+        <div class="character_items_lists_button">Comics: <small style="margin-left:10px">({{ serie.comics.available }})</small></div>
+        <ul>
+            {% for comic in serie.comics.items %}
+                <li><p>{{ comic.name }}</p></li>
+            {% endfor %}
+        </ul>
+
+        <div class="character_items_lists_button">Events: <small style="margin-left:10px">({{ serie.events.available }})</small></div>
+        <ul>
+            {% for event in serie.events.items %}
+                <li><p>{{ serie.name }}</p></li>
+            {% endfor %}
+        </ul>
+
+        <h2>External Links:</h2>
+        <div style="flex-direction:row; margin-top:20px; margin-bottom:50px;">
+            {% for link in serie.urls %}
+                <a href="{{ link.url }}" class="home-button" target="_blank" rel="noopener noreferrer">{{ link.type }}</a>
+            {% endfor %}
+        </div>
+
+
+        <a href="{% url 'series' %}" class="back-button">Back to list</a>
+    </div>
+    {% else %}
+    <p>Character not found.</p>
+    <a href="{% url 'series' %}" class="back-button">Back to list</a>
+    {% endif %}
+</body>
+{% endblock content %}

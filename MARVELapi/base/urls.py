@@ -15,4 +15,6 @@ urlpatterns = [
     path('creator_stories/', views.creator_detail, name="creator_stories"),
     path('events/', views.events_list, name = "events"),
     path('event/<str:title>/', views.event_detail, name="event_detail"),
+    path('series/', views.series_list, name = "series"),
+    path('serie/', views.serie_detail, name='serie_detail'),
 ]

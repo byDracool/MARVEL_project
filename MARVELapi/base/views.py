@@ -3,6 +3,8 @@ import hashlib
 from django.conf import settings
 import requests
 import json
+import base64
+
 
 def compute_md5_hash(my_string):
     m = hashlib.md5()
@@ -68,7 +70,7 @@ def characters(request):
     return render(request, 'base/characters.html', context)
 
 
-def character_detail(request, name):  # <- recibe el nombre desde la URL
+def character_detail(request, name):
     base_url = f'https://gateway.marvel.com/v1/public/characters?name={name}'
     auth_params = make_authorization()
     url = base_url + auth_params
@@ -166,7 +168,7 @@ def creators_list(request):
 
     valid_creators = []
     total_valid = 0
-    original_page = page  # Guardamos el valor inicial para los botones de paginación
+    original_page = page
     tries = 0
     max_tries = 5
 
@@ -291,7 +293,7 @@ def events_list(request):
     return render(request, 'base/events.html', context)
 
 
-def event_detail(request, title):  # <- recibe el nombre desde la URL
+def event_detail(request, title):
     base_url = f'https://gateway.marvel.com/v1/public/events?name={title}'
     auth_params = make_authorization()
     url = base_url + auth_params
@@ -313,4 +315,74 @@ def event_detail(request, title):  # <- recibe el nombre desde la URL
     }
 
     return render(request, "base/event_detail.html", context)
+
+
+def series_list(request):
+    page = int(request.GET.get('page', 1))
+    search_query = request.GET.get('search', '')
+    limit = 20
+    offset = (page - 1) * limit
+
+    base_url = f'https://gateway.marvel.com/v1/public/series?limit={limit}&offset={offset}'
+    if search_query:
+        base_url += f"&nameStartsWith={search_query}"
+
+    auth_params = make_authorization()
+    url = base_url + auth_params
+
+    try:
+        response = requests.get(url)
+        if response.status_code == 200:
+            data = response.json()
+            series = data['data']['results']
+            total = data['data']['total']
+        else:
+            print(f"Request error: {response.status_code}")
+            series = []
+            total = 0
+
+    except requests.RequestException as exception:
+        print(f"Request error: {exception}")
+        series = []
+        total = 0
+
+    total_pages = (total + limit - 1) // limit
+    start_page = max(page - 3, 1)
+    end_page = min(page + 3, total_pages)
+    page_range = range(start_page, end_page + 1)
+
+    for s in series:
+        s['encoded'] = base64.urlsafe_b64encode(json.dumps(s).encode()).decode()
+
+    context = {
+        'series': series,
+        'page': page,
+        'total_pages': total_pages,
+        'page_range': page_range,
+        'search_query': search_query
+    }
+
+    return render(request, 'base/series.html', context)
+
+
+def serie_detail(request):
+    encoded_data = request.GET.get("data")
+    serie = None
+
+    if encoded_data:
+        try:
+            json_data = base64.urlsafe_b64decode(encoded_data).decode()
+            serie = json.loads(json_data)
+        except Exception as e:
+            # print(f"Decode error: {e}")
+            serie = None
+
+    context = {
+        'serie': serie,
+    }
+
+    return render(request, "base/serie_detail.html", context)
+
+
+
 
