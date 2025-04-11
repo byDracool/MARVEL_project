@@ -384,5 +384,50 @@ def serie_detail(request):
     return render(request, "base/serie_detail.html", context)
 
 
+def stories_list(request):
+    page = int(request.GET.get('page', 1))
+    search_query = request.GET.get('search', '')
+    limit = 20
+    offset = (page - 1) * limit
+
+    base_url = f'https://gateway.marvel.com/v1/public/stories?limit={limit}&offset={offset}'
+    if search_query:
+        base_url += f"&nameStartsWith={search_query}"
+
+    auth_params = make_authorization()
+    url = base_url + auth_params
+
+    try:
+        response = requests.get(url)
+        if response.status_code == 200:
+            data = response.json()
+            stories = data['data']['results']
+            total = data['data']['total']
+        else:
+            print(f"Request error: {response.status_code}")
+            stories = []
+            total = 0
+
+    except requests.RequestException as exception:
+        print(f"Request error: {exception}")
+        stories = []
+        total = 0
+
+    total_pages = (total + limit - 1) // limit
+    start_page = max(page - 3, 1)
+    end_page = min(page + 3, total_pages)
+    page_range = range(start_page, end_page + 1)
+
+    context = {
+        'stories': stories,
+        'page': page,
+        'total_pages': total_pages,
+        'page_range': page_range,
+        'search_query': search_query
+    }
+
+    return render(request, 'base/stories.html', context)
+
+
 
 

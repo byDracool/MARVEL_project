@@ -1,0 +1,76 @@
+{% extends 'base/base.html' %}
+{% block content %}
+{% load static %}
+<head>
+    <title>stories</title>
+</head>
+
+<body>
+
+    <div class="flex-container-center">
+        <h1>MARVEL stories:</h1>
+        <br>
+
+
+      <table>
+        <thead>
+          <tr class="table-primary" style="background:#900000">
+<!--            <th scope="col">image</th>-->
+            <th scope="col">Title</th>
+            <th scope="col" style="width: 500px; height:30px;">Issue</th>
+
+          </tr>
+        </thead>
+        <tbody>
+
+        {% for story in stories %}
+        <tr class="table-secondary">
+<!--          <td>-->
+<!--            <img-->
+<!--              src="{{ event.thumbnail.path }}.{{ event.thumbnail.extension }}"-->
+<!--              alt="{{ event.title }}"-->
+<!--              style="width:100px; height:auto; border-radius:8px;"-->
+<!--            />-->
+<!--          </td>-->
+          <td  style="padding-left:10px; width:500px;">{{story.title}}</td>
+          <td style="padding-left:10px;">{{story.originalIssue.name | default:"Unavailable" }}</td>
+
+
+        </tr>
+
+        {% endfor %}
+        </tbody>
+      </table>
+
+
+     <!-- Pagination -->
+    {% if total_pages > 1 %}
+    <div class="pagination" style="margin-top: 30px;">
+
+        <!-- Nav buttons -->
+        {% if page > 1 %}
+            <a href="?page=1{% if search_query %}&search={{ search_query }}{% endif %}" class="pagination-arrow">« First</a>
+            <a href="?page={{ page|add:-1 }}{% if search_query %}&search={{ search_query }}{% endif %}" class="pagination-arrow">← Prev</a>
+        {% endif %}
+
+        <!-- Números de página (solo los cercanos) -->
+        {% for i in page_range %}
+            {% if i == page %}
+                <span class="current-page">{{ i }}</span>
+            {% else %}
+                <a href="?page={{ i }}{% if search_query %}&search={{ search_query }}{% endif %}" class="pagination-number">{{ i }}</a>
+            {% endif %}
+        {% endfor %}
+
+        {% if page < total_pages %}
+            <a href="?page={{ page|add:1 }}{% if search_query %}&search={{ search_query }}{% endif %}" class="pagination-arrow">Next →</a>
+            <a href="?page={{ total_pages }}{% if search_query %}&search={{ search_query }}{% endif %}" class="pagination-arrow">Last »</a>
+        {% endif %}
+    </div>
+    {% endif %}
+
+    <a href="{% url 'home' %}" class="back-button">Back</a>
+    </div>
+</body>
+
+{% endblock content %}

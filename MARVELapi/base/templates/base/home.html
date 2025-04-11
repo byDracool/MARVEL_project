@@ -6,15 +6,28 @@
 </head>
 
 <body>
-    <div class="home-container">
-        <img alt="Logo MARVEL" class="mx-auto d-flex rounded img-fluid mb-3 mb-lg-0" style= "width:15%; margin-bottom:60px;" src="{% static 'base/images/logo_marvel.svg' %}">
 
-        <a href="{% url 'characters' %}"><button type="submit" class="home-button">Characters</button></a>
-        <a href="{% url 'comics' %}"><button type="submit" class="home-button">Comics</button></a>
-        <a href="{% url 'creators' %}"><button type="submit" class="home-button">Creators</button></a>
-        <a href="{% url 'events' %}"><button type="submit" class="home-button">Events</button></a>
-        <a href="{% url 'series' %}"><button type="submit" class="home-button">Series</button></a>
-    </div>
+
+        <div class="home-container">
+            <img src="{% static 'base/images/animated_logo.gif' %}" alt="Animated gif" class="gif-animation">
+<!--            <img alt="Logo MARVEL" class="mx-auto d-flex rounded img-fluid mb-3 mb-lg-0" style= "width:15%; margin-bottom:60px; align-items: center;" src="{% static 'base/images/logo_marvel.svg' %}">-->
+
+            <div class="flex-container">
+                <img alt="Spiderman image" class="side-image" style=margin-left:100px;" src="{% static 'base/images/spider_man.png' %}">
+
+                <div class="column-container">
+                    <a href="{% url 'characters' %}"><button type="submit" class="home-button">Characters</button></a>
+                    <a href="{% url 'comics' %}"><button type="submit" class="home-button">Comics</button></a>
+                    <a href="{% url 'creators' %}"><button type="submit" class="home-button">Creators</button></a>
+                    <a href="{% url 'events' %}"><button type="submit" class="home-button">Events</button></a>
+                    <a href="{% url 'series' %}"><button type="submit" class="home-button">Series</button></a>
+                    <a href="{% url 'stories' %}"><button type="submit" class="home-button">Stories</button></a>
+                </div>
+
+                <img alt="Ironman image" class="side-image" style=margin-right:100px;" src="{% static 'base/images/iron_man_2.png' %}">
+            </div>
+
+        </div>
 </body>
 
 {% endblock content %}

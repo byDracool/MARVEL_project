@@ -45,6 +45,10 @@
                 <li><a href="{% url 'series' %}">SERIES</a></li>
             {% endif %}
 
+            {% if request.resolver_match.url_name != 'stories' %}
+                <li><a href="{% url 'stories' %}">STORIES</a></li>
+            {% endif %}
+
         </ul>
     </div>
 
