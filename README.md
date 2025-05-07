@@ -1,0 +1,2 @@
+A dynamic web application that explores the entire MARVEL universe by generating comprehensive lists of characters, comics, creators, events, series, and stories. Each category features a dedicated search function, allowing users to filter and navigate with ease. Upon selection, the app displays full details for the chosen item, offering fans a rich and interactive experience with official MARVEL content.
+(Based in official MARVEL developers api)
